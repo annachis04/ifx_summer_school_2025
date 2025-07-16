@@ -68,14 +68,49 @@ module ifx_dig_top;
     //===========================================================================
 
     // TODO: --  add here instance for DUT
+    top_filter_bank #(.N(`FILT_NB)) DUT (
+        .clk_i(clk),
+        .rstn_i(rstn_i_w),
 
+        // system data communication interface
+        .acc_en_i(acc_en_i_w),
+        .wr_en_i(wr_en_i_w),
+        .addr_i(addr_i_w),
+        .wdata_i(wdata_i_w),
+        .rdata_o(rdata_o_w),
+
+        // external inputs
+        .data_in(data_in_w),
+
+        // system outputs
+        .data_out(data_out_w),
+        .int_pulse_out(int_pulse_out_w)
+    );
 
     //===========================================================================
     //              INTERFACES
     //===========================================================================
 
     // TODO:  add here instance for dig_if
+    ifx_dig_interface dig_if (
+        //system clock & reset
+        .clk_i(clk),
+        .rstn_i(rstn_i_w),
 
+        // system data communication interface
+        .acc_en_i(acc_en_i_w),
+        .wr_en_i(wr_en_i_w),
+        .addr_i(addr_i_w),
+        .wdata_i(wdata_i_w),
+        .rdata_o(rdata_o_w),
+
+        // external inputs
+        .data_in(data_in_w),
+
+        // system outputs
+        .data_out(data_out_w),
+        .int_pulse_out(int_pulse_out_w)
+    );
 
     //===========================================================================
     // interconnect module and/or interface UVCs
