@@ -36,6 +36,38 @@ class ifx_dig_sfr_test extends ifx_dig_testbase;
         super.main_phase(phase); // call default main phase, contains reset
 
         `TEST_INFO("Main phase started")
+        
+        `TEST_INFO("Star using Write_reg")
+        write_reg_fields(
+            .reg_name("FILTER_CTRL3"),
+            .fields_names({"INT_EN", "FILTER_TYPE"}),
+            .fields_values({1'b1, 2'b10})
+        );
+
+        write_reg_fields(
+            .reg_name("FILTER_CTRL3"),
+            .fields_names({"FILTER_TYPE"}),
+            .fields_values({2'b11})
+        );
+
+        `TEST_INFO("start using read_reg")
+        read_reg("FILTER_CTRL3");
+
+        read_reg("INT_STATUS2");
+
+        /*
+        `TEST_INFO("Read and write to non existing register")
+        read_reg("NONE");
+
+        write_reg_fields(
+            .reg_name("NONE"),
+            .fields_names({"FILTER_TYPE"}),
+            .fields_values({2'b11})
+        );
+            Ne da eroare null, pentru ca in tastbase nu stie ce sa faca daca primesete null
+        */
+
+        `TEST_INFO("End using read_reg and Write_reg")
 
         for (int addr=0; addr < 2**`AWIDTH; addr++) begin
 

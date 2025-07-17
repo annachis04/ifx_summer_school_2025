@@ -243,10 +243,16 @@ endtask
  */
 task ifx_dig_testbase::read_reg(string reg_name);
     ifx_dig_data_bus_uvc_read_sequence read_seq;
+    ifx_dig_reg reg_obj = dig_env.scoreboard.regblock.get_reg_by_name(reg_name);
 
-
-    `uvm_info("read_reg", $sformatf("Read register %s", reg_name), UVM_NONE)
-
+    if(reg_obj == null) begin
+        `uvm_error("read_reg", $sformatf("Invalid register name! No register named <%s>", reg_name))
+    end else begin
+        read_seq = ifx_dig_data_bus_uvc_read_sequence::type_id::create("read_seq", this);
+        `uvm_info("read_reg", $sformatf("Read register %s", reg_name), UVM_NONE)
+        read_seq.address = reg_obj.get_address();
+        read_seq.start(dig_env.data_bus_uvc_agt.sequencer);
+    end
 endtask
 
 /*
