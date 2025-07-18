@@ -98,6 +98,8 @@ class ifx_dig_env extends uvm_env;
 
     // TODO: Connect data_bus_uvc analysis port to scoreboard import
 
+    data_bus_uvc_agt.monitor.mon_port.connect(scoreboard.data_bus_uvc_imp);
+
     foreach(pin_filter_uvc_agt[idx]) begin
       pin_filter_uvc_agt[idx].monitor.mon_port.connect(scoreboard.pin_filter_uvcs_imp_fifo.analysis_export);
     end
