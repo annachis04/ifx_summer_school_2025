@@ -14,6 +14,7 @@
  *******************************************************************************/
 
 task collect_coverage();
+fork
   forever begin
     @(reg_write_e);
     foreach(p_env.pin_filter_uvc_agt[ifilter]) begin
@@ -75,6 +76,17 @@ task collect_coverage();
      `uvm_info("ifx_dig_coverage", $sformatf("Coverage for cg_filter_ctrl %0.9f%%.", cg_filter_ctrl.get_coverage()), UVM_DEBUG)
     end
   end
+
+  forever begin
+    @(reg_read_e);
+    if(latest_address >= `FILT_NB) begin
+        int filt_stat_idx = (latest_address - `FILT_NB) * 8;
+        for (int idx = 0; idx <8; idx++)
+            cg_int_status_read.sample(filt_stat_idx+idx, latest_data[idx]);
+    end
+  end
+
+join
 endtask
 
 covergroup cg_filter_ctrl with function sample();
@@ -109,3 +121,25 @@ endgroup
 
 //TODO: Add covergroup to prove interrupt status was set regardless of
 // selected filter type
+
+covergroup cg_int_status_read with function sample(int id, bit int_stat_bit);
+    option.per_instance = 1;
+    option.name = "cg_int_status_read";
+
+    ID_cp: coverpoint id {
+        // bins ID0 = {0};
+        // bins ID1 = {1};
+        // ......
+        bins ID[] = {[0:`FILT_NB-1]};
+    }
+
+    INT_STAT_cp: coverpoint int_stat_bit {
+        bins INT_ACTIVED = {1};
+        bins INT_NOT_ACTIVATED = {0};
+    }
+
+    INT_STAT_vs_ID_crs: cross ID_cp, INT_STAT_cp {
+        ignore_bins not_relevant = binsof(INT_STAT_cp.INT_NOT_ACTIVATED);
+    }
+
+endgroup
