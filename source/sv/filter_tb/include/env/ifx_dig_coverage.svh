@@ -143,3 +143,35 @@ covergroup cg_int_status_read with function sample(int id, bit int_stat_bit);
     }
 
 endgroup
+
+
+// covergroup: filtering_type
+// coverpoint  
+//     1.filter id
+//     2.filter type 
+// cross coverpoint
+//     1. cross 1.filter id & 2.filter type
+// Sample:
+//     - after receving an item from the filter agents - must be valid 
+
+covergroup cg_filtering_type with function sample(int id, int filter_type);
+    option.per_instance = 1;
+    option.name = "cg_filtering_type";
+
+    cp_id: coverpoint id {
+        // bins ID0 = {0};
+        // bins ID1 = {1};
+        // ......
+        bins ID[] = {[0:`FILT_NB-1]};
+    }
+
+    cp_filter_type: coverpoint filter_type{
+        bins filter_disabled = {0};
+        bins rise_filter = {1};
+        bins fall_filter = {2};
+        bins rise_fall_filter = {3};
+   }
+
+cp_id_x_filter_type: cross cp_id, cp_filter_type;
+
+endgroup

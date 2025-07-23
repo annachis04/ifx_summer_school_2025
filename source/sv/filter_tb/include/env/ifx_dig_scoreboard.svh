@@ -127,6 +127,7 @@ function ifx_dig_scoreboard::new(string name = "ifx_dig_scoreboard", uvm_compone
 //=========================================================================
     this.cg_filter_ctrl        = new();    
     this.cg_int_status_read    = new();
+    this.cg_filtering_type     = new();
 
 //=========================================================================
 //  TLM IMPORT INITIALIZATION.

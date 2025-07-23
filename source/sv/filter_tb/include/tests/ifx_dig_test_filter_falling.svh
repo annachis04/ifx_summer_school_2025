@@ -42,7 +42,7 @@ class ifx_dig_test_filter_falling extends ifx_dig_testbase;
             `TEST_INFO($sformatf("Testing filter: %0d. Configure randomly the filter, except the filter type and interrupt enable", filter_list[ifilt]))
             configure_filter(
                 .filt_idx(filter_list[ifilt]),
-                .filter_type(FILT_FALLING),
+                .filter_type(FILT_FALLING)
                 //.int_en(1) // enable interrupt - to ensure IRQ responds to the filter
                 // .wd_rst(FILT_ASYNC_RESET), // by not configuring the reset type, the default will be random
                 // .window_size(2) // by not configuring the window size, the default will be random

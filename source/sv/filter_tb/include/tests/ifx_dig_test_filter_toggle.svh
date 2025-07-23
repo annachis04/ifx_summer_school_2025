@@ -51,7 +51,7 @@ class ifx_dig_test_filter_toggle extends ifx_dig_testbase;
         end
         filter_list.shuffle();
 
-
+        repeat(10) begin
         // TODO: go through the filters and test them as described in requirement
         foreach(filter_list[idx]) begin
 
@@ -77,6 +77,11 @@ class ifx_dig_test_filter_toggle extends ifx_dig_testbase;
             read_filter_status(0);
             `WAIT_NS(100)
         end
+
+        end
+
+        `TEST_INFO("\n\n\nPrinting Coverage results\n\n\n")
+        `TEST_INFO($sformatf("\ncg_filtering_type coverage is = %f\n", dig_env.scoreboard.cg_filtering_type.get_coverage()))
 
         phase.drop_objection(this);
     endtask
